@@ -82,8 +82,6 @@ class PhotopeaPage {
   }
 
   async addRedRectangle() {
-    console.log("🟥 Red Rectangle bana raha hun...");
-
     await this.page.getByRole("button", { name: "Rectangle (U)" }).click();
     await this.page.waitForTimeout(500);
 
