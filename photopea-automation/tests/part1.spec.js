@@ -43,4 +43,9 @@ test.describe("Photopea Automation - Part 1", () => {
       timeout: 15000,
     });
   });
+
+  test("TC05: Red Rectangle", async () => {
+    await photopeaPage.addRedRectangle();
+    await expect(photopeaPage.page.locator("canvas").first()).toBeVisible();
+  });
 });

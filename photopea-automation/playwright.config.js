@@ -14,11 +14,17 @@ module.exports = defineConfig({
   use: {
     headless: false,
 
+    launchOptions: {
+      args: ["--start-maximized"],
+    },
+
+    viewport: null,
+
     actionTimeout: 30000,
 
     navigationTimeout: 60000,
 
-    viewport: { width: 1920, height: 1080 },
+    // viewport: { width: 1920, height: 1080 },
 
     screenshot: "only-on-failure",
   },

@@ -80,6 +80,51 @@ class PhotopeaPage {
 
     await this.page.waitForTimeout(4000);
   }
+
+  async addRedRectangle() {
+    console.log("🟥 Red Rectangle bana raha hun...");
+
+    await this.page.getByRole("button", { name: "Rectangle (U)" }).click();
+    await this.page.waitForTimeout(500);
+
+    // Right click
+    await this.page
+      .getByRole("button", { name: "Rectangle (U)" })
+      .click({ button: "right" });
+    await this.page.waitForTimeout(300);
+
+    await this.page.getByText("RectangleU").click();
+    await this.page.waitForTimeout(300);
+
+    await this.page
+      .locator("canvas")
+      .nth(4)
+      .click({
+        position: { x: 88, y: 255 },
+      });
+    await this.page.waitForTimeout(500);
+
+    await this.page.getByRole("textbox", { name: "Width:" }).click();
+    await this.page.getByRole("textbox", { name: "Width:" }).fill("600");
+
+    await this.page.getByRole("textbox", { name: "Height:" }).click();
+    await this.page.getByRole("textbox", { name: "Height:" }).fill("600");
+
+    // // OK click karo
+    await this.page.getByRole("button", { name: "OK" }).click();
+    await this.page.waitForTimeout(1000);
+
+    await this.page.locator("canvas").first().click();
+    await this.page.waitForTimeout(500);
+
+    await this.page.locator("span").nth(5).click();
+
+    await this.page
+      .getByRole("button", { name: "Move Tool (V)" })
+      .click({ button: "right" });
+    await this.page.getByText("Move Tool").click();
+    await this.page.waitForTimeout(300);
+  }
 }
 
 module.exports = { PhotopeaPage };
