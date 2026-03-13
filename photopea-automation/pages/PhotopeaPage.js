@@ -108,7 +108,6 @@ class PhotopeaPage {
     await this.page.getByRole("textbox", { name: "Height:" }).click();
     await this.page.getByRole("textbox", { name: "Height:" }).fill("600");
 
-    // // OK click karo
     await this.page.getByRole("button", { name: "OK" }).click();
     await this.page.waitForTimeout(1000);
 
@@ -122,6 +121,90 @@ class PhotopeaPage {
       .click({ button: "right" });
     await this.page.getByText("Move Tool").click();
     await this.page.waitForTimeout(300);
+  }
+
+  async addGreenTriangle() {
+    await this.page
+      .getByRole("button", { name: "Rectangle (U)" })
+      .click({ button: "right" });
+    await this.page.waitForTimeout(300);
+
+    await this.page.getByText("Parametric Shape").click();
+    await this.page.waitForTimeout(500);
+
+    await this.page.getByRole("textbox", { name: "Sides:" }).click();
+    await this.page.getByRole("textbox", { name: "Sides:" }).fill("3");
+    await this.page.keyboard.press("Enter");
+    await this.page.waitForTimeout(300);
+
+    // Canvas pe draw karo
+    await this.page
+      .locator("canvas")
+      .nth(4)
+      .click({
+        position: { x: 208, y: 301 },
+      });
+    await this.page.waitForTimeout(500);
+
+    await this.page.getByRole("textbox", { name: "Width:" }).click();
+    await this.page.getByRole("textbox", { name: "Width:" }).fill("200");
+    await this.page.getByRole("textbox", { name: "Height:" }).click();
+    await this.page.getByRole("textbox", { name: "Height:" }).fill("200");
+    await this.page.getByRole("button", { name: "OK" }).click();
+    await this.page.waitForTimeout(1000);
+
+    await this.page.locator("canvas").first().click();
+    await this.page.waitForTimeout(500);
+
+    await this.page.locator(".fitem.cswatch > span:nth-child(2)").click();
+
+    // Position adjust
+    await this.page.getByRole("button", { name: "Move Tool (V)" }).click();
+    for (let i = 0; i < 25; i++) await this.page.keyboard.press("ArrowLeft");
+    for (let i = 0; i < 13; i++) await this.page.keyboard.press("ArrowUp");
+
+    await this.page.waitForTimeout(500);
+  }
+
+  async addBlueCircle() {
+    await this.page
+      .getByRole("button", { name: "Parametric Shape (U)" })
+      .click({ button: "right" });
+    await this.page.waitForTimeout(300);
+
+    await this.page.getByText("Ellipse").click();
+    await this.page.waitForTimeout(500);
+
+    // Shift+click = perfect circle
+    await this.page
+      .locator("canvas")
+      .nth(4)
+      .click({
+        modifiers: ["Shift"],
+        position: { x: 95, y: 364 },
+      });
+    await this.page.waitForTimeout(500);
+
+    await this.page.getByRole("textbox", { name: "Width:" }).click();
+    await this.page.getByRole("textbox", { name: "Width:" }).fill("250");
+    await this.page.getByRole("textbox", { name: "Height:" }).click();
+    await this.page.getByRole("textbox", { name: "Height:" }).fill("250");
+    await this.page.getByRole("button", { name: "OK" }).click();
+    await this.page.waitForTimeout(1000);
+
+    await this.page.locator("canvas").first().click();
+    await this.page.waitForTimeout(500);
+
+    await this.page.locator("span:nth-child(3)").first().click();
+
+    // Position adjust
+    await this.page.getByRole("button", { name: "Move Tool (V)" }).click();
+    await this.page.waitForTimeout(1000);
+
+    await this.page.waitForTimeout(1000);
+    for (let i = 0; i < 10; i++) await this.page.keyboard.press("ArrowDown");
+
+    await this.page.waitForTimeout(5000);
   }
 }
 

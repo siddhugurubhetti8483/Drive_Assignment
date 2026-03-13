@@ -48,4 +48,14 @@ test.describe("Photopea Automation - Part 1", () => {
     await photopeaPage.addRedRectangle();
     await expect(photopeaPage.page.locator("canvas").first()).toBeVisible();
   });
+
+  test("TC06: Green Triangle", async () => {
+    await photopeaPage.addGreenTriangle();
+    await expect(photopeaPage.page.locator("canvas").first()).toBeVisible();
+  });
+
+  test("TC07: Blue Circle", async () => {
+    await photopeaPage.addBlueCircle();
+    await expect(photopeaPage.page.locator("canvas").first()).toBeVisible();
+  });
 });
