@@ -1,5 +1,4 @@
 const config = require("../utils/config");
-const { expect } = require("@playwright/test");
 
 class PhotopeaPage {
   constructor(page) {
@@ -7,77 +6,79 @@ class PhotopeaPage {
   }
 
   // Opening Photopea website
-  async open() {
-    await this.page.goto("https://www.photopea.com/");
+  async openPhotopea() {
+    await this.page.goto(config.PHOTOPEA_URL);
 
-    await this.page.waitForSelector("canvas", { timeout: 30000 });
+    await this.page.waitForSelector("button:has-text('Start using Photopea')", {
+      timeout: 30000,
+    });
 
-    await this.page.waitForTimeout(3000);
-
-    try {
-      await this.page.click("text=OK", { timeout: 4000 });
-      console.log("✅ Popup band kiya");
-    } catch (e) {
-      // Popup nahi aaya — koi baat nahi, aage badho
-    }
-
-    try {
-      await this.page.keyboard.press("Escape");
-    } catch (e) {}
-
-    await this.page.waitForTimeout(2000);
-
-    console.log("✅ Photopea khul gaya");
+    console.log("Landing page load ho gaya");
   }
 
-  async createDocument() {
-    console.log("📄 Document bana raha hun...");
+  async clickStartPhotopea() {
+    console.log("Start using Photopea");
 
-    // Yeh script Photopea ki apni language mein hai
-    // (Adobe ExtendScript — Photoshop jaisi)
-    const script = `
-      app.documents.add(
-        ${config.CANVAS_WIDTH},
-        ${config.CANVAS_HEIGHT},
-        ${config.CANVAS_DPI},
-        '${config.CANVAS_NAME}',
-        NewDocumentMode.RGB,
-        DocumentFill.TRANSPARENT,
-        1,
-        BitsPerChannelType.THIRTYTWO
-      );
-    `;
+    await this.page
+      .getByRole("button", { name: "Start using Photopea" })
+      .first()
+      .click();
 
-    // Script ko URL mein dalo
-    // JSON.stringify → script ko safe string banao
-    // encodeURIComponent → URL ke liye safe banao
-    const encoded = encodeURIComponent(
-      JSON.stringify({
-        files: [],
-        script: script,
-      }),
-    );
+    await this.page.waitForSelector("text=New Project", {
+      timeout: 30000,
+    });
 
-    // Is URL pe jao — Photopea khulega aur script chalega
-    await this.page.goto(`https://www.photopea.com/#${encoded}`);
+    await this.page.waitForTimeout(1000);
+  }
 
-    // Canvas aane tak ruko
-    await this.page.waitForSelector("canvas", { timeout: 45000 });
+  async clickNewProject() {
+    console.log("Click New Project");
 
-    // Script execute hone do — 5 second ruko
-    await this.page.waitForTimeout(5000);
+    await this.page.getByText("New Project").click();
 
-    // Popup aye to band karo
-    try {
-      await this.page.click("text=OK", { timeout: 3000 });
-    } catch (e) {}
+    await this.page.waitForSelector("button:has-text('Create')", {
+      timeout: 15000,
+    });
 
-    try {
-      await this.page.keyboard.press("Escape");
-      await this.page.waitForTimeout(500);
-    } catch (e) {}
+    await this.page.waitForTimeout(500);
+  }
 
-    console.log("✅ Document ban gaya: 1280x960, Transparent");
+  async fillAndCreate() {
+    console.log("Fill Value & Create");
+
+    await this.page.getByRole("textbox", { name: "Name" }).click();
+    await this.page.getByRole("textbox", { name: "Name" }).fill("");
+    await this.page
+      .getByRole("textbox", { name: "Name" })
+      .fill(config.CANVAS_NAME);
+    console.log(`Name: ${config.CANVAS_NAME}`);
+
+    await this.page.getByRole("textbox", { name: "Width" }).click();
+    await this.page
+      .getByRole("textbox", { name: "Width" })
+      .fill(String(config.CANVAS_WIDTH));
+    console.log(`Width: ${config.CANVAS_WIDTH}`);
+
+    await this.page.getByRole("textbox", { name: "Height" }).click();
+    await this.page
+      .getByRole("textbox", { name: "Height" })
+      .fill(String(config.CANVAS_HEIGHT));
+    console.log(`Height: ${config.CANVAS_HEIGHT}`);
+
+    await this.page.getByRole("textbox", { name: "DPI" }).click();
+    await this.page
+      .getByRole("textbox", { name: "DPI" })
+      .fill(String(config.CANVAS_DPI));
+    console.log(`DPI: ${config.CANVAS_DPI}`);
+
+    await this.page.getByLabel("Background").selectOption("2");
+    console.log("Background: Transparent");
+    await this.page.locator("#dd470").selectOption("2");
+    console.log("Bit depth: 32 bit");
+
+    await this.page.getByRole("button", { name: "Create" }).click();
+
+    await this.page.waitForTimeout(4000);
   }
 }
 

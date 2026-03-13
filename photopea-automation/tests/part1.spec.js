@@ -10,15 +10,37 @@ test.describe("Photopea Automation - Part 1", () => {
     });
 
     const page = await context.newPage();
-
     photopeaPage = new PhotopeaPage(page);
   });
 
-  test("Open Photopea website", async () => {
-    await photopeaPage.createDocument();
+  test("TC01: Open Photopea website", async () => {
+    await photopeaPage.openPhotopea();
+    await expect(
+      photopeaPage.page
+        .getByRole("button", { name: "Start using Photopea" })
+        .first(),
+    ).toBeVisible();
+  });
 
-    await expect(photopeaPage.page.locator("canvas")).toBeVisible();
+  test("TC02: Editor", async () => {
+    await photopeaPage.clickStartPhotopea();
 
-    console.log("Photopea website opened successfully");
+    await expect(photopeaPage.page.getByText("New Project")).toBeVisible();
+  });
+
+  test("TC03: Open New Project dialog", async () => {
+    await photopeaPage.clickNewProject();
+
+    await expect(
+      photopeaPage.page.getByRole("button", { name: "Create" }),
+    ).toBeVisible();
+  });
+
+  test("TC04: Values", async () => {
+    await photopeaPage.fillAndCreate();
+
+    await expect(photopeaPage.page.locator("canvas").first()).toBeVisible({
+      timeout: 15000,
+    });
   });
 });
